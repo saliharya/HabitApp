@@ -48,11 +48,11 @@ class SettingsActivity : AppCompatActivity() {
             //TODO 11 : Update theme based on value in ListPreference
             val themePreference = findPreference<ListPreference>(getString(R.string.pref_key_dark))
             themePreference?.setOnPreferenceChangeListener { _, newValue ->
-                val themeValue = when (val themeString = newValue as String) {
-                    getString(R.string.pref_dark_on) -> 1
-                    getString(R.string.pref_dark_off) -> 2
-                    getString(R.string.pref_dark_follow_system) -> 0
-                    else -> throw IllegalArgumentException("Unexpected value: $themeString")
+                val themeValue = when (newValue as String) {
+                    getString(R.string.pref_dark_on) -> AppCompatDelegate.MODE_NIGHT_YES
+                    getString(R.string.pref_dark_off) -> AppCompatDelegate.MODE_NIGHT_NO
+                    getString(R.string.pref_dark_follow_system) -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                    else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                 }
                 updateTheme(themeValue)
                 true
