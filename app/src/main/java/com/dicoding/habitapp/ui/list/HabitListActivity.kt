@@ -54,7 +54,7 @@ class HabitListActivity : AppCompatActivity() {
             startActivity(navigateToDetail)
         }
 
-        viewModel.getHabits().observe(this) {
+        viewModel.habits.observe(this) {
             adapter.submitList(it)
         }
 

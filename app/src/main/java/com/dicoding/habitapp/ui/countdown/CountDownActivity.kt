@@ -1,14 +1,19 @@
 package com.dicoding.habitapp.ui.countdown
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat.getParcelableExtra
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.data.Habit
+import com.dicoding.habitapp.notification.NotificationWorker
 import com.dicoding.habitapp.utils.HABIT
+import java.util.concurrent.TimeUnit
 
 class CountDownActivity : AppCompatActivity() {
 
@@ -27,8 +32,8 @@ class CountDownActivity : AppCompatActivity() {
             //TODO 10 : Set initial time and observe current time. Update button state when countdown is finished
             viewModel.setInitialTime(habit.minutesFocus * 60 * 1000)
 
-            viewModel.currentTime.observe(this) {
-                findViewById<TextView>(R.id.tv_count_down).text = viewModel.currentTimeString.value
+            viewModel.currentTimeString.observe(this) {
+                findViewById<TextView>(R.id.tv_count_down).text = it
             }
 
             viewModel.eventCountDownFinish.observe(this) { eventCountDownFinish ->
@@ -38,14 +43,20 @@ class CountDownActivity : AppCompatActivity() {
             }
 
             //TODO 13 : Start and cancel One Time Request WorkManager to notify when time is up.
+            val workManager = WorkManager.getInstance(this)
+            val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>().setInitialDelay(
+                habit.minutesFocus, TimeUnit.MINUTES
+            ).build()
 
             findViewById<Button>(R.id.btn_start).setOnClickListener {
                 viewModel.startTimer()
+                workManager.enqueue(workRequest)
                 updateButtonState(true)
             }
 
             findViewById<Button>(R.id.btn_stop).setOnClickListener {
                 viewModel.resetTimer()
+                workManager.cancelWorkById(workRequest.id)
                 updateButtonState(false)
             }
         }
