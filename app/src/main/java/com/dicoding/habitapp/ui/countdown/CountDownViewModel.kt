@@ -12,7 +12,7 @@ class CountDownViewModel : ViewModel() {
     private var timer: CountDownTimer? = null
 
     private val initialTime = MutableLiveData<Long>()
-    private val currentTime = MutableLiveData<Long>()
+    val currentTime = MutableLiveData<Long>()
 
     // The String version of the current time (hh:mm:ss)
     val currentTimeString = currentTime.map { time ->
