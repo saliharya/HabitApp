@@ -9,12 +9,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.data.Habit
 import com.dicoding.habitapp.ui.ViewModelFactory
 import com.dicoding.habitapp.ui.add.AddHabitActivity
+import com.dicoding.habitapp.ui.detail.DetailHabitActivity
 import com.dicoding.habitapp.utils.Event
+import com.dicoding.habitapp.utils.HABIT_ID
 import com.dicoding.habitapp.utils.HabitSortType
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -35,23 +38,34 @@ class HabitListActivity : AppCompatActivity() {
         }
 
         //TODO 6 : Initiate RecyclerView with LayoutManager
+        recycler = findViewById(R.id.rv_habit)
+        recycler.layoutManager = LinearLayoutManager(this)
 
         initAction()
 
         val factory = ViewModelFactory.getInstance(this)
-        viewModel = ViewModelProvider(this, factory).get(HabitListViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory)[HabitListViewModel::class.java]
 
         //TODO 7 : Submit pagedList to adapter and add intent to detail
+        val adapter = HabitAdapter { habit ->
+            val navigateToDetail = Intent(this, DetailHabitActivity::class.java)
+            navigateToDetail.putExtra(HABIT_ID, habit.id)
+            startActivity(navigateToDetail)
+        }
+
+        viewModel.getHabits().observe(this) {
+            adapter.submitList(it)
+        }
+
+        recycler.adapter = adapter
     }
 
     //TODO 15 : Fixing bug : Menu not show and SnackBar not show when list is deleted using swipe
     private fun showSnackBar(eventMessage: Event<Int>) {
         val message = eventMessage.getContentIfNotHandled() ?: return
         Snackbar.make(
-            findViewById(R.id.coordinator_layout),
-            getString(message),
-            Snackbar.LENGTH_SHORT
-        ).setAction("Undo"){
+            findViewById(R.id.coordinator_layout), getString(message), Snackbar.LENGTH_SHORT
+        ).setAction("Undo") {
             viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as Habit)
         }.show()
     }
@@ -86,8 +100,7 @@ class HabitListActivity : AppCompatActivity() {
     private fun initAction() {
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {
             override fun getMovementFlags(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder
+                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder
             ): Int {
                 return makeMovementFlags(0, ItemTouchHelper.RIGHT)
             }

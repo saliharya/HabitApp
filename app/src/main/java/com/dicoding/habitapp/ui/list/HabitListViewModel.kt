@@ -42,4 +42,8 @@ class HabitListViewModel(private val habitRepository: HabitRepository) : ViewMod
     fun insert(habit: Habit) {
         habitRepository.insertHabit(habit)
     }
+
+    fun getHabits(sortType: HabitSortType = HabitSortType.START_TIME): LiveData<PagedList<Habit>> {
+        return habitRepository.getHabits(sortType)
+    }
 }
