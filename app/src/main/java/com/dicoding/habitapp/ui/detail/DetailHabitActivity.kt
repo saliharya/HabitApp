@@ -46,11 +46,13 @@ class DetailHabitActivity : AppCompatActivity() {
                             ContextCompat.getColor(this, R.color.red)
                         )
                     }
+
                     resources.getStringArray(R.array.priority_level)[1] -> {
                         findViewById<View>(R.id.detail_priority_level).setBackgroundColor(
                             ContextCompat.getColor(this, R.color.yellow)
                         )
                     }
+
                     else -> {
                         findViewById<View>(R.id.detail_priority_level).setBackgroundColor(
                             ContextCompat.getColor(this, R.color.green)

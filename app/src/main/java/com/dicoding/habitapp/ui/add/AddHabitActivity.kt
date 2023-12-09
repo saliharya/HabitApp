@@ -15,7 +15,8 @@ import com.dicoding.habitapp.data.Habit
 import com.dicoding.habitapp.ui.ViewModelFactory
 import com.dicoding.habitapp.utils.TimePickerFragment
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class AddHabitActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListener {
 
@@ -41,18 +42,27 @@ class AddHabitActivity : AppCompatActivity(), TimePickerFragment.DialogTimeListe
         return when (item.itemId) {
             R.id.action_save -> {
                 val title = findViewById<EditText>(R.id.add_ed_title).text.toString()
-                val minutesFocus = findViewById<EditText>(R.id.add_ed_minutes_focus).text.toString().toLong()
+                val minutesFocus =
+                    findViewById<EditText>(R.id.add_ed_minutes_focus).text.toString().toLong()
                 val startTime = findViewById<TextView>(R.id.add_tv_start_time).text.toString()
-                val priorityLevel = findViewById<Spinner>(R.id.sp_priority_level).selectedItem.toString()
+                val priorityLevel =
+                    findViewById<Spinner>(R.id.sp_priority_level).selectedItem.toString()
                 if (title.isNotEmpty()) {
-                    val habit = Habit(title = title, minutesFocus = minutesFocus, startTime = startTime, priorityLevel = priorityLevel)
+                    val habit = Habit(
+                        title = title,
+                        minutesFocus = minutesFocus,
+                        startTime = startTime,
+                        priorityLevel = priorityLevel
+                    )
                     viewModel.saveHabit(habit)
                     finish()
                 } else {
-                    Toast.makeText(this, getString(R.string.empty_message), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.empty_message), Toast.LENGTH_SHORT)
+                        .show()
                 }
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }

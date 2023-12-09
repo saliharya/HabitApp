@@ -7,7 +7,7 @@ import androidx.lifecycle.switchMap
 import com.dicoding.habitapp.data.Habit
 import com.dicoding.habitapp.data.HabitRepository
 
-class DetailHabitViewModel(private val habitRepository: HabitRepository): ViewModel() {
+class DetailHabitViewModel(private val habitRepository: HabitRepository) : ViewModel() {
 
     private val _habitId = MutableLiveData<Int>()
 
