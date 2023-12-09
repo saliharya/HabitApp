@@ -46,13 +46,15 @@ class SettingsActivity : AppCompatActivity() {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
             //TODO 11 : Update theme based on value in ListPreference
-            val themePreference: ListPreference? = findPreference(getString(R.string.pref_key_dark))
-
+            val themePreference = findPreference<ListPreference>(getString(R.string.pref_key_dark))
             themePreference?.setOnPreferenceChangeListener { _, newValue ->
-                val selectedTheme = newValue.toString().toInt()
-
-                updateTheme(selectedTheme)
-
+                val themeValue = when (val themeString = newValue as String) {
+                    getString(R.string.pref_dark_on) -> 1
+                    getString(R.string.pref_dark_off) -> 2
+                    getString(R.string.pref_dark_follow_system) -> 0
+                    else -> throw IllegalArgumentException("Unexpected value: $themeString")
+                }
+                updateTheme(themeValue)
                 true
             }
         }
