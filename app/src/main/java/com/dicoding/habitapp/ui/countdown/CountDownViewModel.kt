@@ -22,7 +22,7 @@ class CountDownViewModel : ViewModel() {
     val eventCountDownFinish: LiveData<Boolean> = _eventCountDownFinish
 
     fun setInitialTime(minuteFocus: Long) {
-        val initialTimeMillis = minuteFocus * 2
+        val initialTimeMillis = minuteFocus * 60 * 1000
         initialTime.value = initialTimeMillis
         currentTime.value = initialTimeMillis
 

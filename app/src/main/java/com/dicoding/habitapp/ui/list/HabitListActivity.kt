@@ -68,22 +68,10 @@ class HabitListActivity : AppCompatActivity() {
         val snackbar = Snackbar.make(
             findViewById(R.id.coordinator_layout), getString(message), Snackbar.LENGTH_SHORT
         )
-
         snackbar.setAction("Undo") {
             viewModel.insert(viewModel.undo.value?.getContentIfNotHandled() as Habit)
         }
-
         snackbar.show()
-
-        snackbar.addCallback(object : Snackbar.Callback() {
-            override fun onShown(sb: Snackbar?) {
-                showSortingPopUpMenu()
-            }
-
-            override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                invalidateOptionsMenu()
-            }
-        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

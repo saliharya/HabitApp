@@ -42,28 +42,30 @@ class CountDownActivity : AppCompatActivity() {
             viewModel.eventCountDownFinish.observe(this) { eventCountDownFinish ->
                 if (eventCountDownFinish) {
                     updateButtonState(false)
+                    val workManager = WorkManager.getInstance(applicationContext)
+
+                    val inputData =
+                        Data.Builder().putInt(HABIT_ID, habit.id).putString(HABIT_TITLE, habit.title)
+                            .build()
+
+                    val notificationWork = OneTimeWorkRequest.Builder(NotificationWorker::class.java)
+                        .setInputData(inputData).addTag(NOTIF_UNIQUE_WORK).build()
+
+                    workManager.enqueueUniqueWork(
+                        NOTIF_UNIQUE_WORK, ExistingWorkPolicy.REPLACE, notificationWork
+                    )
                 }
             }
 
             //TODO 13 : Start and cancel One Time Request WorkManager to notify when time is up.
             findViewById<Button>(R.id.btn_start).setOnClickListener {
                 updateButtonState(true)
-                val workManager = WorkManager.getInstance(applicationContext)
-
-                val inputData =
-                    Data.Builder().putInt(HABIT_ID, habit.id).putString(HABIT_TITLE, habit.title)
-                        .build()
-
-                val notificationWork = OneTimeWorkRequest.Builder(NotificationWorker::class.java)
-                    .setInputData(inputData).addTag(NOTIF_UNIQUE_WORK).build()
-
-                workManager.enqueueUniqueWork(
-                    NOTIF_UNIQUE_WORK, ExistingWorkPolicy.REPLACE, notificationWork
-                )
+                viewModel.startTimer()
             }
 
             findViewById<Button>(R.id.btn_stop).setOnClickListener {
                 updateButtonState(false)
+                viewModel.resetTimer()
                 val workManager = WorkManager.getInstance(applicationContext)
                 workManager.cancelUniqueWork(NOTIF_UNIQUE_WORK)
             }

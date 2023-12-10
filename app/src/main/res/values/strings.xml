@@ -33,7 +33,6 @@
     <string name="pref_key_notify">key_notification</string>
     <string name="pref_notify_name">Notification</string>
     <string name="pref_notify_summary">Reminder when countdown has finished.</string>
-    <string name="notify_channel_name">Habit Reminder</string>
     <string name="notify_content">Time Up!</string>
 
     <!-- Sort -->
