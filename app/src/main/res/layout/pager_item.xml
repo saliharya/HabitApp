@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
@@ -18,56 +19,72 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textSize="36sp"
+            app:layout_constraintBottom_toTopOf="@+id/item_tv_start_time"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/item_tv_start_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/item_priority_level"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_tv_title" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/item_priority_level"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginBottom="48dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_open_count_down"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_tv_start_time" />
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/item_tv_minutes"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceSubtitle2"
-            android:textColor="@color/white"
-            android:textSize="36sp"
-            android:textStyle="bold"
+            android:orientation="vertical"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="@+id/item_priority_level"
             app:layout_constraintEnd_toEndOf="@+id/item_priority_level"
             app:layout_constraintStart_toStartOf="@+id/item_priority_level"
-            app:layout_constraintTop_toTopOf="@+id/item_priority_level" />
+            app:layout_constraintTop_toTopOf="@+id/item_priority_level">
+
+            <TextView
+                android:id="@+id/item_tv_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textColor="@color/white"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/minutes"
+                android:textAppearance="?attr/textAppearanceSubtitle2"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_open_count_down"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="64dp"
             android:text="@string/open_count_down"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
