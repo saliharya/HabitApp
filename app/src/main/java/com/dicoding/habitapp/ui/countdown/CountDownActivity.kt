@@ -1,18 +1,20 @@
 package com.dicoding.habitapp.ui.countdown
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.IntentCompat.getParcelableExtra
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.data.Habit
 import com.dicoding.habitapp.notification.NotificationWorker
 import com.dicoding.habitapp.utils.HABIT
+import com.dicoding.habitapp.utils.HABIT_TITLE
 import java.util.concurrent.TimeUnit
 
 class CountDownActivity : AppCompatActivity() {
@@ -40,6 +42,12 @@ class CountDownActivity : AppCompatActivity() {
                 if (eventCountDownFinish) {
                     updateButtonState(false)
                 }
+
+                val notificationWorkRequest =
+                    OneTimeWorkRequest.Builder(NotificationWorker::class.java)
+                        .setInputData(createInputData()).build()
+
+                WorkManager.getInstance(this).enqueue(notificationWorkRequest)
             }
 
             //TODO 13 : Start and cancel One Time Request WorkManager to notify when time is up.
@@ -61,6 +69,11 @@ class CountDownActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun createInputData(): Data {
+        return Data.Builder().putInt(NotificationWorker.HABIT_ID, 1)
+            .putString(NotificationWorker.HABIT_TITLE, HABIT_TITLE).build()
     }
 
     private fun updateButtonState(isRunning: Boolean) {

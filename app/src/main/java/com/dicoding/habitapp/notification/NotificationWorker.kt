@@ -11,8 +11,6 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.ui.detail.DetailHabitActivity
-import com.dicoding.habitapp.utils.HABIT_ID
-import com.dicoding.habitapp.utils.HABIT_TITLE
 
 class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
 
@@ -37,11 +35,11 @@ class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
         val notificationManager =
             applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        val notification = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-            .setContentTitle("Habit Reminder")
-            .setContentText("Don't forget to do your habit: $habitTitle")
-            .setSmallIcon(R.drawable.ic_notifications).setContentIntent(createPendingIntent())
-            .setAutoCancel(true).build()
+        val notification =
+            NotificationCompat.Builder(applicationContext, CHANNEL_ID).setContentTitle(habitTitle)
+                .setContentText("Don't forget to do your habit: $habitTitle")
+                .setSmallIcon(R.drawable.ic_notifications).setContentIntent(createPendingIntent())
+                .setAutoCancel(true).build()
 
         createNotificationChannel(notificationManager)
         notificationManager.notify(NOTIFICATION_ID, notification)
@@ -52,7 +50,10 @@ class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
         intent.putExtra(HABIT_ID, habitId)
 
         return PendingIntent.getActivity(
-            applicationContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT
+            applicationContext,
+            0,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_CANCEL_CURRENT
         )
     }
 
@@ -69,6 +70,8 @@ class NotificationWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, p
     companion object {
         const val CHANNEL_ID = "habit_channel"
         const val NOTIFICATION_ID = 1
+        const val HABIT_ID = "habit_id"
+        const val HABIT_TITLE = "habit_title"
     }
-
 }
+
