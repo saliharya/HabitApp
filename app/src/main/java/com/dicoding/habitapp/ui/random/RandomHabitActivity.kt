@@ -2,15 +2,16 @@ package com.dicoding.habitapp.ui.random
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.dicoding.habitapp.R
 import com.dicoding.habitapp.ui.ViewModelFactory
+import com.dicoding.habitapp.ui.countdown.CountDownActivity
 import com.dicoding.habitapp.utils.HABIT
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.dicoding.habitapp.ui.countdown.CountDownActivity
 
 class RandomHabitActivity : AppCompatActivity() {
 
@@ -28,27 +29,26 @@ class RandomHabitActivity : AppCompatActivity() {
 
         val tabs: TabLayout = findViewById(R.id.tabs)
         TabLayoutMediator(tabs, viewPager) { tab, position ->
-            tab.text = "Habit ${position+1}"
+            tab.text = "Habit ${position + 1}"
         }.attach()
 
         val factory = ViewModelFactory.getInstance(this)
-        val viewModel = ViewModelProvider(this, factory).get(RandomHabitViewModel::class.java)
+        val viewModel = ViewModelProvider(this, factory)[RandomHabitViewModel::class.java]
 
         viewModel.priorityLevelHigh.observe(this) {
-            if (it != null){
+            if (it != null) {
                 adapter.submitData(RandomHabitAdapter.PageType.HIGH, it)
             }
         }
         viewModel.priorityLevelMedium.observe(this) {
-            if (it != null){
+            if (it != null) {
                 adapter.submitData(RandomHabitAdapter.PageType.MEDIUM, it)
             }
         }
         viewModel.priorityLevelLow.observe(this) {
-            if (it != null){
+            if (it != null) {
                 adapter.submitData(RandomHabitAdapter.PageType.LOW, it)
             }
         }
-
     }
 }
